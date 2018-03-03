@@ -1,58 +1,30 @@
-const { GraphQLServer } = require('graphql-yoga')
-const { Prisma } = require('prisma-binding')
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './styles/index.css';
+import App from './App';
+import registerServiceWorker from './registerServiceWorker';
 
-const resolvers = {
-  Query: {
-    feed(parent, args, ctx, info) {
-      return ctx.db.query.posts({ where: { isPublished: true } }, info)
-    },
-    drafts(parent, args, ctx, info) {
-      return ctx.db.query.posts({ where: { isPublished: false } }, info)
-    },
-    post(parent, { id }, ctx, info) {
-      return ctx.db.query.post({ where: { id } }, info)
-    },
-  },
-  Mutation: {
-    createDraft(parent, { title, text }, ctx, info) {
-      return ctx.db.mutation.createPost(
-        {
-          data: {
-            title,
-            text,
-            isPublished: false,
-          },
-        },
-        info,
-      )
-    },
-    deletePost(parent, { id }, ctx, info) {
-      return ctx.db.mutation.deletePost({ where: { id } }, info)
-    },
-    publish(parent, { id }, ctx, info) {
-      return ctx.db.mutation.updatePost(
-        {
-          where: { id },
-          data: { isPublished: true },
-        },
-        info,
-      )
-    },
-  },
-}
+import { ApolloProvider } from 'react-apollo';
+import { ApolloClient} from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
-const server = new GraphQLServer({
-  typeDefs: './src/schema.graphql',
-  resolvers,
-  context: req => ({
-    ...req,
-    db: new Prisma({
-      typeDefs: 'src/generated/prisma.graphql',
-      endpoint: '__PRISMA_ENDPOINT__', // the endpoint of the Prisma DB service
-      secret: 'mysecret123', // specified in database/prisma.yml
-      debug: true, // log all GraphQL queryies & mutations
-    }),
-  }),
-})
+const httpLink = new HttpLink(
+    {
+        uri: 'http://localhost:4000'
+    }
+)
 
-server.start(() => console.log('Server is running on http://localhost:4000'))
+const client = new ApolloClient(
+    {
+        link: httpLink,
+        cache: new InMemoryCache()
+    }
+)
+
+ReactDOM.render(
+    <ApolloProvider client={client}
+        ><App />
+    </ApolloProvider>
+    , document.getElementById('root'));
+registerServiceWorker();
