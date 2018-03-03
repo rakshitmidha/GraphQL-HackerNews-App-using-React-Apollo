@@ -1,0 +1,20 @@
+{
+  "name": "graphQL_HackerNews_ReactApp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rakshitmidha/GraphQL-HackerNews-App-using-React-Apollo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rakshitmidha/GraphQL-HackerNews-App-using-React-Apollo/issues"
+  },
+  "homepage": "https://github.com/rakshitmidha/GraphQL-HackerNews-App-using-React-Apollo#readme"
+}
