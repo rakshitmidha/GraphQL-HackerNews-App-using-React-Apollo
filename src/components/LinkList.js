@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Link from './Link'
 
-class ListLink extends Component {
+class LinkList extends Component {
     render() {
         const linkdsToRender = [
             {
@@ -26,4 +26,4 @@ class ListLink extends Component {
     }
 }
 
-export default LinkLst
+export default LinkList
