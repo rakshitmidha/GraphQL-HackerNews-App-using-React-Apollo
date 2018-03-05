@@ -5,7 +5,7 @@ body {
 }
 
 input {
-  max-width: 500px;
+  width: 400px;
 }
 
 .gray {
