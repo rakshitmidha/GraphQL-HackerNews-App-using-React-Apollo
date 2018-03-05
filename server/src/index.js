@@ -19,11 +19,11 @@ const server = new GraphQLServer({
     ...req,
     db: new Prisma({
       typeDefs: 'src/generated/prisma.graphql',
-      endpoint: 'http://localhost:4466/hackernews-graphql-js/dev',
+      endpoint: 'https://eu1.prisma.sh/public-gentlesentry-488/hackernews-graphql-js/dev',
       secret: 'mysecret123',
       debug: true
     }),
   }),
 })
 
-server.start(() => console.log('Server is running on http://localhost:3000'))
+server.start(() => console.log('Server is running on http://localhost:4000'))
