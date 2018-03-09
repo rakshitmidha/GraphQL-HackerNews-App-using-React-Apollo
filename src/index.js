@@ -4,6 +4,8 @@ import './styles/index.css';
 import App from './components/App';
 import registerServiceWorker from './registerServiceWorker';
 
+import { AUTH_TOKEN } from './constants';
+import { ApolloLink } from 'apollo-client-preset';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
@@ -16,9 +18,24 @@ const httpLink = new HttpLink(
     }
 )
 
+const middlewareAuthLink = new ApolloClient(
+    (operation, forward) => {
+        const token = localStorage.getItem(AUTH_TOKEN)
+        const authorizationHeader = token ? `Bearer ${token}` : null
+        operation.setContext({
+            headers: {
+                authorization: authorizationHeader
+            }
+        })
+        return forward(operation)
+    }
+)
+
+const httpLinkWithAuthToken = middlewareAuthLink.concat(httpLink)
+
 const client = new ApolloClient(
     {
-        link: httpLink,
+        link: httpLinkWithAuthToken,
         cache: new InMemoryCache()
     }
 )
