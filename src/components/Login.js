@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { AUTH_TOKEN } from '../constants'
 
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
+
 class Login extends Component {
     state = {
         login: true, //Switch between Login & signiup
@@ -64,4 +67,15 @@ class Login extends Component {
         localStorage.setItem(AUTH_TOKEN, token)
     }
 }
-export default Login
+
+const SIGNUP_MUTATION = gql `
+    mutation SignupMutation($email: String!, $password: String!) {
+        login(email: $email, password: $password) {
+            token
+        }
+    }
+`
+export default compose(
+    graphql(SIGNUP_MUTATION, { name: 'signupMutation' }),
+    graphql(LOGIN_MUTATION, { name: 'loginMutation' })
+)(Login)
