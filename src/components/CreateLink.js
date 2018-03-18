@@ -37,8 +37,18 @@ class CreateLink extends Component {
         await this.props.postMutation({
             variables: {
                 description,
-                url
-            }
+                url,
+            },
+            update: (
+                store, { data: { post } }
+            ) => {
+                const data = store.readQuery({ query: FEED_QUERY })
+                data.feed.links.splice(0, 0, post)
+                store.writeQuery({
+                    query: FEED_QUERY,
+                    data,
+                })
+            },
         })
         this.props.history.push('/');
     }
