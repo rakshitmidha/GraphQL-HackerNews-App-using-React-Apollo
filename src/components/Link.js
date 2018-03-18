@@ -3,6 +3,9 @@ import React, { Component } from 'react'
 import { AUTH_TOKEN } from '../constants'
 import { timeDifferenceForDate } from '../utils'
 
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
+
 class Link extends Component {
     render() {
         const authToken = localStorage.getItem(AUTH_TOKEN)
@@ -37,5 +40,25 @@ class Link extends Component {
     }
 }
 
-export default Link
+const VOTE_MUTATION = gql`
+    mutation VoteMutation($linkId: ID!) {
+        vote(linkId: $linkId) {
+            id
+            link {
+                votes {
+                    id
+                    user {
+                        id
+                    }
+                }
+            }
+            user {
+                id
+            }
+        }
+    }
+`
+export default graphql(VOTE_MUTATION, {
+    name: 'voteMutation',
+})(Link)
 
