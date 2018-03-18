@@ -22,10 +22,10 @@ class LinkList extends Component {
         return (
             <div>
                 {linksToRender.map((link, index) => (
-                    <Link 
-                        key={link.id} 
+                    <Link
+                        key={link.id}
                         updateStoreAfterVote={this._updateCacheAfterVote}
-                        index={index} 
+                        index={index}
                         link={link} />
                 ))}
             </div>
@@ -34,7 +34,7 @@ class LinkList extends Component {
 
     _updateCacheAfterVote = (store, createVote, linkId) => {
         //1
-        const data = store.readQuery({ query: FEED_QUERY})
+        const data = store.readQuery({ query: FEED_QUERY })
 
         //2
         const votedLink = data.feed.links.find(link => link.id === linkId)
@@ -47,7 +47,7 @@ class LinkList extends Component {
 
 
 // 1
-const FEED_QUERY = gql`
+export const FEED_QUERY = gql`
   # 2
   query FeedQuery {
     feed {
