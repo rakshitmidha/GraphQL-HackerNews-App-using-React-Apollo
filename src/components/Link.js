@@ -36,7 +36,12 @@ class Link extends Component {
     }
 
     _voteForLink = async () => {
-        //TODO Implement later
+        const linkId = this.props.link.id
+        await this.props.voteMutation({
+            variables: {
+                linkId,
+            },
+        })
     }
 }
 
