@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 
+import { AUTH_TOKEN } from '../constants'
+import { timeDifferenceForDate } from '../utils'
+
 class Link extends Component {
     render() {
         const authToken = localStorage.getItem(AUTH_TOKEN)
