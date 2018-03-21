@@ -29,7 +29,7 @@ class Search extends Component {
                     <Link
                         key={link.id}
                         link={link}
-                        index={indesx}
+                        index={index}
                     />
                 )
                 }
@@ -38,7 +38,38 @@ class Search extends Component {
     }
 
     _executeSearch = async () => {
-        //implement later
+        const { filter } = this.state
+        const result = await this.props.client.query({
+            query: FEED_SEARCH_QUERY,
+            variables: { filter }, 
+        })
+        const links = result.data.feed.links
+        this.setState({ links })
     }
 }
+
 export default withApollo(Search)
+
+
+const FEED_SEARCH_QUERY = gql`
+    query FeedSearchQuery($filter: String!) {
+        feed(filter: $filter) {
+            links {
+                id
+                url
+                description
+                createdAt
+                postedBy {
+                    id
+                    name
+                }
+                votes {
+                    id
+                    user {
+                        id
+                    }
+                }
+            }
+        }
+    }
+`
