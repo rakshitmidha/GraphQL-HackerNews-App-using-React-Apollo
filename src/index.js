@@ -5,7 +5,9 @@ import App from './components/App';
 import registerServiceWorker from './registerServiceWorker';
 
 import { AUTH_TOKEN } from './constants';
-import { ApolloLink } from 'apollo-client-preset';
+import { ApolloLink, split } from 'apollo-client-preset';
+import { WebSocketLink } from 'apollo-link-ws'
+import { getMainDefinition } from 'apollo-utilities'
 import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
@@ -16,6 +18,25 @@ const httpLink = new HttpLink(
     {
         uri: 'http://localhost:4000'
     }
+)
+
+const wsLink = new WebSocketLink({
+    uri: 'ws://localhost:4000',
+    options: {
+        reconnect: true,
+        connectParams: {
+            authToken: localStorage.getItem(AUTH_TOKEN),
+        }
+    }
+})
+
+const link = split(
+    ({ query }) => {
+        const { kind, operation } = getMainDefinition(query)
+        return kind === 'OperationDefinition' && operation === 'subscription'
+    },
+    wsLink,
+    httpLinkWithAuthToken,
 )
 
 const middlewareAuthLink = new ApolloLink(
