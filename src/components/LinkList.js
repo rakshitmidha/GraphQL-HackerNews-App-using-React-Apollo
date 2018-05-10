@@ -124,9 +124,8 @@ class LinkList extends Component {
 
 // 1
 export const FEED_QUERY = gql`
-  # 2
-  query FeedQuery {
-    feed {
+  query FeedQuery($first: Int, $skip: Int, $orderBy: LinkOrderByInput) {
+    feed(first: $first, skip: $skip, orderBy: $orderBy) {
       links {
         id
         createdAt
@@ -143,6 +142,7 @@ export const FEED_QUERY = gql`
             }
         }
       }
+      count
     }
   }
 `
