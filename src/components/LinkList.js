@@ -51,14 +51,15 @@ class LinkList extends Component {
     }
 
     _updateCacheAfterVote = (store, createVote, linkId) => {
-        //1
-        const data = store.readQuery({ query: FEED_QUERY })
+        const isNewPage = this.props.location.pathname.includes('new')
+        const page = parseInt(this.props.match.params.page, 10)
+        const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0
+        const first = isNewPage ? LINKS_PER_PAGE : 100
+        const orderBy = isNewPage ? 'createdAt_DESC' : null
+        const data = store.readQuery({ query: FEED_QUERY, variables: { first, skip, orderBy } })
 
-        //2
         const votedLink = data.feed.links.find(link => link.id === linkId)
         votedLink.votes = createVote.link.votes
-
-        //3
         store.writeQuery({ query: FEED_QUERY, data })
     }
 
@@ -133,7 +134,7 @@ class LinkList extends Component {
     }
 
     _getLinksToRender = (isNewPage) => {
-        if(isNewPage) {
+        if (isNewPage) {
             return this.props.feedQuery.feed.links
         }
         const rankedLinks = this.props.feedQuery.feed.links.slice()
@@ -143,7 +144,7 @@ class LinkList extends Component {
 
     _nextPage = () => {
         const page = parseInt(this.props.match.params.page, 10)
-        if(page <= this.props.feedQuery.feed.count / LINKS_PER_PAGE) {
+        if (page <= this.props.feedQuery.feed.count / LINKS_PER_PAGE) {
             const nextPage = page + 1
             this.props.history.push(`/new/${nextPage}`)
         }
@@ -151,7 +152,7 @@ class LinkList extends Component {
 
     _previousPage = () => {
         const page = parseInt(this.props.match.params.page, 10)
-        if(page > 1) {
+        if (page > 1) {
             const previousPage = page - 1
             this.props.history.push(`/new/${previousPage}`)
         }
@@ -184,17 +185,16 @@ export const FEED_QUERY = gql`
   }
 `
 
-// 3
 export default graphql(FEED_QUERY, {
     name: 'feedQuery',
     options: ownProps => {
-        const page = parseInt(ownProps.match.params.page, 10)
-        const isNewPage = ownProps.location.pathname.includes('new')
-        const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0
-        const first = isNewPage ? LINKS_PER_PAGE : 100
-        const orderBy = isNewPage ? 'createdAt_DESC' : null
-        return {
-            variables: { first, skip, orderBy },
-        }
+      const page = parseInt(ownProps.match.params.page, 10)
+      const isNewPage = ownProps.location.pathname.includes('new')
+      const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0
+      const first = isNewPage ? LINKS_PER_PAGE : 100
+      const orderBy = isNewPage ? 'createdAt_DESC' : null
+      return {
+        variables: { first, skip, orderBy },
+      }
     },
-})(LinkList)
+  })(LinkList)
