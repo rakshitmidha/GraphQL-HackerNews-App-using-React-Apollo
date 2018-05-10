@@ -1,6 +1,6 @@
 # GraphQL-HackerNews-App-using-React-Apollo
 
-HackerNews app using React, Apollo & GraphQL
+HackerNews app made using React, Apollo & GraphQL
 
 ### Frontend:
 React: Frontend framework for building user interfaces
