@@ -25,7 +25,9 @@ class LinkList extends Component {
         }
 
         // 3
-        const linksToRender = this.props.feedQuery.feed.links
+        const isNewPage = this.props.location.pathname.includes('new')
+        const linksToRender = this._getLinksToRender(isNewPage)
+        const page = parseInt(this.props.match.params.page, 10)
 
         return (
             <div>
