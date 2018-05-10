@@ -131,6 +131,15 @@ class LinkList extends Component {
           `,
         })
     }
+
+    _getLinksToRender = (isNewPage) => {
+        if(isNewPage) {
+            return this.props.feedQuery.feed.links
+        }
+        const rankedLinks = this.props.feedQuery.feed.links.slice()
+        rankedLinks.sort((l1, l2) => l2.votes.length - l1.votes.length)
+        return rankedLinks
+    }
 }
 
 
