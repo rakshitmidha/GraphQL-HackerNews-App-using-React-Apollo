@@ -140,6 +140,14 @@ class LinkList extends Component {
         rankedLinks.sort((l1, l2) => l2.votes.length - l1.votes.length)
         return rankedLinks
     }
+
+    _nextPage = () => {
+        const page = parseInt(this.props.match.params.page, 10)
+        if(page <= this.props.feedQuery.feed.count / LINKS_PER_PAGE) {
+            const nextPage = page + 1
+            this.props.history.push(`/new/${nextPage}`)
+        }
+    }
 }
 
 
